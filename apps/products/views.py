@@ -27,6 +27,7 @@ def product_list(request):
     if str(selected_cat_id).isdigit():
         selected_cat_id = int(selected_cat_id)
         if selected_cat_id != 0:
+            products = products.filter(sub_category_id=selected_cat_id)
             request.session['selected_cat_id'] = selected_cat_id
         else:
             if request.session.get('selected_cat_id'):

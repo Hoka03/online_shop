@@ -187,7 +187,7 @@
                                 <a class="btn btn-outline-dark btn-square" href=""><i
                                         class="fa fa-shopping-cart"></i></a>
                                 {% if product.id in wishlists %}
-                                <a class="btn btn-outline-dark btn-square" href="{% url 'product_wishlists_page' product.id %}"><i class="fas fa-heart" style='color: red'></i></a>
+                                <a class="btn btn-outline-dark btn-square" href="{% url 'product_wishlists_page' product.id %}"><i class="fas fa-heart" style='color: #9400D3'></i></a>
                                 {% else %}
                                 <a class="btn btn-outline-dark btn-square" href="{% url 'product_wishlists_page' product.id %}"><i class="far fa-heart"></i></a>
                                 {% endif %}
