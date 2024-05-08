@@ -20,6 +20,7 @@ def wishlist(request):
     if not user.is_authenticated:
         return redirect('login-page')
     wishlist_products = Wishlist.objects.order_by('-created_at').filter(user_id=user.pk)
+
     page = request.GET.get('page', '1')
     paginator = Paginator(wishlist_products, 9)
     paginator_obj = paginator.get_page(page)

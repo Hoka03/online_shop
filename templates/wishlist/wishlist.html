@@ -60,13 +60,13 @@
                             {% if product.product.get_first_image.image %}
                             <img class="img-fluid w-100" src="{{ product.product.get_first_image.image.url }}" alt="">
                             {% else %}
-                            <img class="img-fluid w-100" src="{% static 'img.png' %}" alt="">
+                            <img class="img-fluid w-100" src="{% static 'no_photo.jpeg' %}" alt="">
                             {% endif %}
                             <div class="product-action">
                                 <a class="btn btn-outline-dark btn-square" href=""><i
                                         class="fa fa-shopping-cart"></i></a>
 
-                                <a class="btn btn-outline-dark btn-square" href="{% url 'product_wishlists-page' product.product.id %}"><i class="far fa-heart"></i><i class="far fa-heart"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href="{% url 'product_wishlists_page' product.product.id %}"><i class="fas fa-heart" style='color: red'></i></a>
 
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                                 <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
@@ -74,7 +74,7 @@
                         </div>
                         <div class="text-center py-4">
                             <a class="h6 text-decoration-none text-truncate"
-                               href="{% url 'product_detail-page' product.pk %}">{{ product.product.title }}</a>
+                               href="{% url 'product_detail_page' product.pk %}">{{ product.product.title }}</a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
                                 <h5>$123.00</h5>
                             </div>

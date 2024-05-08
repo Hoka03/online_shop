@@ -13,24 +13,28 @@ class GeneralAdmin(admin.ModelAdmin):
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('title_uz', 'slug', 'title_ru', 'icon',)
+    list_display_links = list_display
     prepopulated_fields = {'slug': ['title_uz']}
 
 
 @admin.register(Coupon)
 class CouponAdmin(admin.ModelAdmin):
     list_display = ('title_uz', 'slug', 'title_ru', 'code', 'from_date', 'to_date', 'amount', 'amount_is_percent',)
+    list_display_links = list_display
     prepopulated_fields = {'slug': ['title_uz']}
 
 
 @admin.register(SocialLink)
 class SocialLinkAdmin(admin.ModelAdmin):
     list_display = ('icon', 'name', 'slug', 'link',)
+    list_display_links = list_display
     prepopulated_fields = {'slug': ['name']}
 
 
 @admin.register(PaymentMethod)
 class PaymentMethodAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'logo',)
+    list_display_links = list_display
     prepopulated_fields = {'slug': ['name']}
 
 

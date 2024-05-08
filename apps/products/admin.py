@@ -17,6 +17,7 @@ class ProductFeatureInline(admin.TabularInline):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('main_category', 'sub_category', 'title_uz', 'slug', 'title_ru', 'created_at')
+    list_display_links = list_display
     prepopulated_fields = {'slug': ['title_uz']}
     readonly_fields = ('review_counts', 'rating', 'created_at')
     inlines = [ProductImageInline, ProductFeatureInline]
