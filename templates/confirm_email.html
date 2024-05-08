@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Registration or Sign Up form in HTML CSS | CodingLab </title>
+    <link rel="stylesheet" href="{% static 'css/style_login_register.css' %}">
+   </head>
+<body>
+  <div class="wrapper">
+    <h2>Confirm Email</h2>
+    <h3>Code sent to your {{ email }}, Please check it in 5 minutes!!!</h3>
+    <form action="{% url 'register_user' %}" method="POST">
+      {% csrf_token %}
+
+        <input type="hidden" name="email" value="{{ email }}">
+        <input type="hidden" name="password" value="{{ password }}">
+
+      <div class="input-box">
+        <input type="number" name="code" value="{{ code }}" placeholder="Confirm code" required>
+      </div>
+
+      <div>
+        <p style="color: red">{{ code_error }}</p>
+      </div>
+
+      <div class="input-box button">
+        <input type="Submit" value="Confirm">
+      </div>
+
+      <div class="text">
+        <h3>Back to Register Page<a href="{% url 'register_page' %}">Register Page</a></h3>
+      </div>
+
+    </form>
+  </div>
+
+</body>
+</html>
