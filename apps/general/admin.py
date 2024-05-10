@@ -5,6 +5,7 @@ from apps.general.models import General, Service, Banner, SocialLink,  PaymentMe
 @admin.register(General)
 class GeneralAdmin(admin.ModelAdmin):
     list_display = ('name', 'logo', 'phone_number', 'email', 'address', 'desc')
+    list_display_links = list_display
 
     def has_add_permission(self, request):
         return not General.objects.last()

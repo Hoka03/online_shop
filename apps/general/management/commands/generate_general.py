@@ -6,10 +6,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         general = [
             General(name=f'name{1}',
-                    phone_number=f'+{998901234567}',
+                    phone_number=f'+{998999875421}',
                     email=f'tolqinovoybek@gmail.com',
-                    address=f'address',
-                    desc=f'desc', )
+                    address=f'Sergeli 8A',
+                    desc=f'This magazine is very wonderful!!!', )
         ]
         General.objects.bulk_create(general)
         self.stdout.write(self.style.SUCCESS('general created'))
@@ -24,7 +24,7 @@ class Command(BaseCommand):
         banners = [
             Banner(sub_category_id=i,
                    title_uz=f'title_uz{i}',
-                   slug=f'slug{i}',
+                   slug=f'slug-{i}',
                    title_ru=f'title-ru{i}',
                    desc_uz=f'desc_uz{i}',
                    desc_ru=f'desc_ru{i}', )

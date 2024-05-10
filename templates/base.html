@@ -111,8 +111,7 @@
                 {% if general.logo %}
                 <img src="{{ general.logo.url }}" width="150" height="100">
                 {% else %}
-                <img src="https://logos-world.net/wp-content/uploads/2021/08/Chrysler-Logo.png" width="200"
-                     height="100">
+                <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fpikbest.com%2Fso%2Fonline-shop-logo.html&psig=AOvVaw3YwVoKkhKpoEXK4-kntoYO&ust=1715421805660000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCKCX6qzqgoYDFQAAAAAdAAAAABAE">
                 {% endif %}
             </a>
             {% endfor %}
@@ -204,7 +203,7 @@
                             <span class="badge text-secondary border border-secondary rounded-circle"
                                   style="padding-bottom: 2px;">{{ wishlists.count }}</span>
                         </a>
-                        <a href="" class="btn px-0 ml-3">
+                        <a href="{% url 'shop_cart' %}" class="btn px-0 ml-3">
                             <i class="fas fa-shopping-cart text-primary"></i>
                             <span class="badge text-secondary border border-secondary rounded-circle"
                                   style="padding-bottom: 2px;">0</span>
@@ -292,15 +291,6 @@
                 <a class="text-primary" href="https://htmlcodex.com">HTML Codex</a>
             </p>
         </div>
-        <!--        <div class="col-md-6 px-xl-0 text-center text-md-right">-->
-        <!--            {% for payment_method in payment_methods %}-->
-        <!--                {% if payment_method.logo %}-->
-        <!--                <img class="img-fluid" src="{{ payment_method.logo.url }}" alt="">-->
-        <!--                {% else %}-->
-        <!--                <img class="img-fluid" src="{% static 'img.png' %}" alt="">-->
-        <!--                {% endif %}-->
-        <!--            {% endfor %}-->
-        <!--        </div>-->
     </div>
 </div>
 <!-- Footer End -->

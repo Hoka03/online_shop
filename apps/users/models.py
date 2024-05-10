@@ -27,7 +27,7 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):
-        return f'{self.pk}:{self.email}'
+        return f'{self.email}'
 
     def get_normalize_fields(self):
         return ['first_name',

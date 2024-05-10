@@ -21,7 +21,7 @@ class SubCategory(models.Model):
     name_ru = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
-        return f'{self.main_category}: {self.name_uz}'
+        return f'{self.main_category}'
 
     def get_normalize_fields(self):
         return [

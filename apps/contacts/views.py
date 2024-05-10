@@ -19,8 +19,9 @@ def contact_page(request):
         name = user.first_name
         email = user.email
     elif not (email and name):
-        messages.error(request, 'name yoki email kiritilmadi!!!')
+        messages.error(request, 'Name or Email was not entered')
         return redirect('contact-page')
+
     Contact.objects.create(name=name, email=email, message=message, title=subject)
     messages.success(request, 'Success send')
     return redirect('contact-page')

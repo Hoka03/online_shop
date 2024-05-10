@@ -25,6 +25,5 @@ class Command(BaseCommand):
         os.system('python manage.py generate_comments')
         self.stdout.write(self.style.SUCCESS('generate_features'))
         os.system('python manage.py generate_features')
-        self.stdout.write(self.style.SUCCESS('generate_carts'))
-        os.system('python manage.py generate_carts')
+
 

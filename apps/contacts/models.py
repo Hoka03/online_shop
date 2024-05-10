@@ -14,7 +14,7 @@ class Contact(models.Model):
     message = models.TextField(max_length=1000)
 
     def __str__(self):
-        return f'{self.email}: {self.message}'
+        return f'{self.email}'
 
     def get_normalize_fields(self):
         return [

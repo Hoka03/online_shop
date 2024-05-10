@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.categories.models import SubCategory
 from apps.users.valedate import validate_phone_number
 from apps.comments.serveces import normalize_text
+from apps.general.services import get_field_by_language
 
 
 class General(models.Model):
@@ -38,10 +39,11 @@ class Service(models.Model):
     title_ru = models.CharField(max_length=50, blank=True)
     icon = models.ImageField(upload_to='general/service/image/%Y/%m/%d')
 
+    def __str__(self):
+        return self.title
+
     def title(self):
-        if not self.title:
-            return self.title_uz
-        return getattr(self, f'title_{get_language()}')
+        return get_field_by_language(self, 'title')
 
     def get_normalize_fields(self):
         return [
@@ -63,15 +65,14 @@ class Banner(models.Model):
     desc_uz = models.CharField(max_length=50)
     desc_ru = models.CharField(max_length=50, blank=True)
 
+    def __str__(self):
+        return self.title
+
     def title(self):
-        if not self.title:
-            return self.title_uz
-        return getattr(self, f'title_{get_language()}')
+        return get_field_by_language(self, 'title')
 
     def desc(self):
-        if not self.desc:
-            return self.desc_uz
-        return getattr(self, f'desc_{get_language()}')
+        return get_field_by_language(self, 'desc')
 
     def get_normalize_fields(self):
         return [
@@ -90,6 +91,9 @@ class BannerImage(models.Model):
     image = models.ImageField(upload_to='banner_image/%Y/%m/%d')
     product = models.ForeignKey(Banner, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.product
+
 
 class Coupon(models.Model):
     title_uz = models.CharField(max_length=50)
@@ -102,17 +106,15 @@ class Coupon(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2, help_text='So\'mda yoki foizda kiriting!!!')
     amount_is_percent = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.title
+
     def title(self):
-        if not self.title:
-            return self.title_uz
-        return getattr(self, f'title_{get_language()}')
+        return get_field_by_language(self, 'title')
 
     def clean(self):
         if self.amount_is_percent and not (1 <= self.amount <= 100):
             raise ValidationError({'amount': '[1 : 100]-oraliqda kiriting!!!'})
-
-    def __str__(self):
-        return self.title_uz
 
     def get_normalize_fields(self):
         return [

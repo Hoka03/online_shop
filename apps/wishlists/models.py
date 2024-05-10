@@ -15,4 +15,4 @@ class Wishlist(models.Model):
         unique_together = ('user', 'product')
 
     def __str__(self):
-        return f'{self.user}: {self.product}'
+        return f'{self.user}'

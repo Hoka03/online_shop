@@ -1,12 +1,14 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, Min
 
 from apps.products.models import Product
+from apps.features.models import Feature
+from apps.comments.models import Comment
 
 
 def product_list(request):
-    products = Product.objects.all().order_by('-id')
+    products = Product.objects.filter(features__isnull=False).distinct().order_by('-id')
 
     selected_cat_id = request.GET.get('sub_category', '0')
 
@@ -45,8 +47,28 @@ def product_list(request):
 
 
 def product_detail(request, pk):
-    product = get_object_or_404(Product, pk=pk)
+    try:
+        product = Product.objects.get(pk=pk)
+    except Product.DoesNotExist:
+        return redirect('product-list')
+
+    images = product.productimage_set.order_by('ordering_number')
+    price = product.features.aggregate(Min('price'))['price__min']
+    product.price = price
+    features = Feature.objects.filter(featurevalue__productfeature__product_id=product.pk).distinct()
+
+    comments = Comment.objects.order_by('-id')[:10]
+
+    page = request.GET.get('page', '1')
+    paginator = Paginator(comments, 4)
+    page_obj = paginator.get_page(page)
+
     context = {
-        'product': product
+        'product': product,
+        'images': images,
+        'features': features,
+        'page_obj': page_obj
     }
-    return render(request, template_name='products/product_detail.html', context=context)
+    return render(request, 'products/product_detail.html', context)
+
+

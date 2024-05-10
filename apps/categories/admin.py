@@ -19,7 +19,7 @@ class MainCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(SubCategory)
 class SubCategoryAdmin(admin.ModelAdmin):
-    list_display = ('main_category', 'name_uz', 'slug', 'name_ru')
+    list_display = ('id', 'main_category', 'name_uz', 'slug', 'name_ru')
     list_filter = ['main_category']
     search_fields = ['name_uz', 'name_ru']
     prepopulated_fields = {'slug': ['name_uz']}

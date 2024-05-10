@@ -60,10 +60,12 @@ def register_user(request):
     code = request.POST.get('code')
 
     UserAuthCode.objects.filter(expire_at__lte=now()).delete()
-    object = UserAuthCode.objects.filter(email=email, code=code, expire_at__gte=now())
-    if object.last():
+
+    obj = UserAuthCode.objects.filter(email=email, code=code, expire_at__gte=now())
+
+    if obj.last():
         CustomUser.objects.create_user(email=email, password=password)
-        object.delete()
+        obj.delete()
     elif UserAuthCode.objects.filter(email=email, expire_at__gte=now()):
         context = {
             'email': email,
@@ -73,7 +75,7 @@ def register_user(request):
         }
         return render(request, 'register_login/confirm_email.html', context)
     else:
-        messages.error(request, 'Uzr emailni yoki kodni xato kiritdingiz')
+        messages.error(request, 'Email or Password was entered mistake')
         return redirect('register-page')
 
     return render(request, 'register_login/login.html')
@@ -85,17 +87,17 @@ def login_page(request):
         password = request.POST.get('password')
 
         if not email:
-            messages.error(request, 'email kiritilmadi.')
+            messages.error(request, 'Email was not entered')
             return redirect('login-page')
 
         if not password:
-            messages.error(request, 'password kiritilmadi.')
+            messages.error(request, 'password was not entered')
             return redirect('login-page')
 
         user = authenticate(request=request, email=email, password=password)
 
         if not user:
-            messages.error(request, 'login yoki parolni notug\'ri kiritdingiz')
+            messages.error(request, 'Login or name was entered mistake')
             return redirect('login-page')
 
         login(request, user)
