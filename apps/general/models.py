@@ -1,8 +1,6 @@
 from django.db import models
 from django.core.validators import ValidationError
 from django.utils.timezone import now
-from django.utils.translation import get_language
-from django.utils.translation import gettext_lazy as _
 
 from apps.categories.models import SubCategory
 from apps.users.valedate import validate_phone_number
@@ -42,6 +40,7 @@ class Service(models.Model):
     def __str__(self):
         return self.title
 
+    @property
     def title(self):
         return get_field_by_language(self, 'title')
 
@@ -68,9 +67,11 @@ class Banner(models.Model):
     def __str__(self):
         return self.title
 
+    @property
     def title(self):
         return get_field_by_language(self, 'title')
 
+    @property
     def desc(self):
         return get_field_by_language(self, 'desc')
 
@@ -102,18 +103,27 @@ class Coupon(models.Model):
 
     code = models.CharField(max_length=10, unique=True)
     from_date = models.DateField(default=now)
-    to_date = models.DateField(default=now)
+    end_date = models.DateField(default=now)
     amount = models.DecimalField(max_digits=10, decimal_places=2, help_text='So\'mda yoki foizda kiriting!!!')
-    amount_is_percent = models.BooleanField(default=True)
+    is_percent = models.BooleanField(default=True)
+
+    @classmethod
+    def check_coupon(cls, code: str):
+        today = now().date()
+        coupon = cls.objects.filter(code=code, from_date__gte=today, end_date__lte=today).first()
+        if not coupon:
+            return None
+        return coupon.amount, coupon.is_percent
 
     def __str__(self):
         return self.title
 
+    @property
     def title(self):
         return get_field_by_language(self, 'title')
 
     def clean(self):
-        if self.amount_is_percent and not (1 <= self.amount <= 100):
+        if self.is_percent and not (1 <= self.amount <= 100):
             raise ValidationError({'amount': '[1 : 100]-oraliqda kiriting!!!'})
 
     def get_normalize_fields(self):

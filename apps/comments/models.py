@@ -10,8 +10,8 @@ class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
 
-    name = models.CharField(max_length=50)
-    email = models.EmailField()
+    name = models.CharField(max_length=50, blank=True)
+    email = models.EmailField(blank=True, null=True)
 
     message = models.CharField(max_length=200)
     rating = models.PositiveSmallIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])

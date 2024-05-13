@@ -10,7 +10,7 @@ class Command(BaseCommand):
                             email=f'tolqinovoybek{i}@gmail.com',
                             rating=f'{5}',
                             message=f'message{i}')
-                    for i in range(1, 6)
+                    for i in range(1, 4)
                     for j in Product.objects.all()]
         Comment.objects.bulk_create(comments)
-        self.stdout.write(self.style.SUCCESS('150 comments created'))
+        self.stdout.write(self.style.SUCCESS(f'{Comment.objects.count()} comments created'))

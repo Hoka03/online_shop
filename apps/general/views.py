@@ -1,12 +1,10 @@
 from django.shortcuts import render
 
-from apps.categories.models import MainCategory
 from apps.products.models import Product
 from apps.general.models import Service, SocialLink, Banner, PaymentMethod
 
 
 def home(request):
-    # main_cat = MainCategory.objects.filter()
     products = Product.objects.all().order_by('?')[0:8]
     recent_products = Product.objects.all().order_by('-pk')[0:8]
     services = Service.objects.all()
@@ -24,3 +22,5 @@ def home(request):
     }
 
     return render(request, 'index.html', context)
+
+

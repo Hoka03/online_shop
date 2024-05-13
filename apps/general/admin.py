@@ -20,7 +20,7 @@ class ServiceAdmin(admin.ModelAdmin):
 
 @admin.register(Coupon)
 class CouponAdmin(admin.ModelAdmin):
-    list_display = ('title_uz', 'slug', 'title_ru', 'code', 'from_date', 'to_date', 'amount', 'amount_is_percent',)
+    list_display = ('title_uz', 'slug', 'title_ru', 'code', 'from_date', 'end_date', 'amount', 'is_percent',)
     list_display_links = list_display
     prepopulated_fields = {'slug': ['title_uz']}
 

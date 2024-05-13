@@ -53,21 +53,18 @@ def product_detail(request, pk):
         return redirect('product-list')
 
     images = product.productimage_set.order_by('ordering_number')
-    price = product.features.aggregate(Min('price'))['price__min']
-    product.price = price
+    product.price = product.features.aggregate(Min('price'))['price__min']
     features = Feature.objects.filter(featurevalue__productfeature__product_id=product.pk).distinct()
 
-    comments = Comment.objects.order_by('-id')[:10]
-
     page = request.GET.get('page', '1')
-    paginator = Paginator(comments, 4)
-    page_obj = paginator.get_page(page)
+    paginator = Paginator(Comment.objects.filter(product_id=pk).order_by('-id'), 5)
+    comments = paginator.get_page(page)
 
     context = {
         'product': product,
         'images': images,
         'features': features,
-        'page_obj': page_obj
+        'comments': comments
     }
     return render(request, 'products/product_detail.html', context)
 

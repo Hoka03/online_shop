@@ -1,7 +1,6 @@
 import os
 
 from django.core.management import BaseCommand
-from apps.general.models import General, Service, Banner, SocialLink, PaymentMethod, Coupon
 
 
 class Command(BaseCommand):

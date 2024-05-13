@@ -60,7 +60,7 @@
                     {% csrf_token %}
                     {% for feature in features %}
                     <div class="d-flex mb-3">
-                        <strong class="text-dark mr-3">{{ feature.name }}</strong>
+                        <strong class="text-dark mr-3">{{ feature.slug }}</strong>
                         {% for value_obj in feature.featurevalue_set.all %}
                         <div class="custom-control custom-radio custom-control-inline">
                             <input type="radio" {% if forloop.counter == 1 %}checked {% endif %}
@@ -71,25 +71,24 @@
                         {% endfor %}
                     </div>
                     {% endfor %}
-
                     <form action="" method="POST">
                         {% csrf_token %}
                         <div class="d-flex align-items-center mb-4 pt-2">
                             <div class="input-group quantity mr-3" style="width: 130px;">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-primary btn-minus">
+                                    <btn class="btn btn-primary btn-minus">
                                         <i class="fa fa-minus"></i>
-                                    </button>
+                                    </btn>
                                 </div>
                                 <input type="number" name="counts"
                                        class="form-control bg-secondary border-0 text-center" value="1">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-primary btn-plus">
+                                    <btn class="btn btn-primary btn-plus">
                                         <i class="fa fa-plus"></i>
-                                    </button>
+                                    </btn>
                                 </div>
                             </div>
-                            <a href="{% url 'shop_cart' %}"><button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
+                            <a href="{% url 'shop_coupon' %}"><button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
                                 Cart
                             </button></a>
                         </div>
@@ -118,8 +117,7 @@
 
                 <div class="nav nav-tabs mb-4">
                     <a class="nav-item nav-link text-dark active" data-toggle="tab" href="#tab-pane-1">Description</a>
-                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Reviews {{
-                        product.comment_set.count }}</a>
+                    <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-3">Reviews {{ comment.paginator.count }}</a>
                 </div>
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="tab-pane-1">
@@ -129,7 +127,7 @@
                     <div class="tab-pane fade" id="tab-pane-3">
                         <div class="row">
                             <div class="col-md-6">
-                                {% for comment in product.comment_set.all %}
+                                {% for comment in comments %}
                                 <div class="media mb-4">
                                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqJGGuTGcD6NgRL6PD7BcLfxg_QFDFLtC8f-3HiKV4VpYLesWYpvhWVauXJg&s"
                                          alt="Image" class="img-fluid mr-3 mt-1"
@@ -148,28 +146,28 @@
                                 <div class="col-12">
                                     <nav aria-label="Comment pagination">
                                         <ul class="pagination justify-content-center">
-                                            {% if page_obj.has_previous %}
+                                            {% if comments.has_previous %}
                                             <li class="page-item">
                                                 <a class="page-link" href="?page=1">First</a>
                                             </li>
                                             <li class="page-item">
-                                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                                                <a class="page-link" href="?page={{ comments.previous_page_number }}">Previous</a>
                                             </li>
                                             {% endif %}
 
-                                            {% for num in page_obj.paginator.page_range %}
-                                            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                                            {% for num in comments.paginator.page_range %}
+                                            <li class="page-item {% if comments.number == num %}active{% endif %}">
                                                 <a class="page-link" href="?page={{ num }}">{{ num }}</a>
                                             </li>
                                             {% endfor %}
 
-                                            {% if page_obj.has_next %}
+                                            {% if comments.has_next %}
                                             <li class="page-item">
                                                 <a class="page-link"
-                                                   href="?page={{ page_obj.next_page_number }}">Next</a>
+                                                   href="?page={{ comments.next_page_number }}">Next</a>
                                             </li>
                                             <li class="page-item">
-                                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                                                <a class="page-link" href="?page={{ comments.paginator.num_pages }}">Last</a>
                                             </li>
                                             {% endif %}
                                         </ul>
@@ -182,7 +180,7 @@
                                 <h4 class="mb-4">Leave a review</h4>
                                 <small>Your email address will not be published. Required fields are marked *</small>
 
-                                <form method="POST">
+                                <form method="POST" action="{% url 'comment_page' product.pk %}">
                                     {% csrf_token %}
                                     {% for msg in messages %}
                                     <h2>{{ msg }}</h2>
@@ -198,25 +196,16 @@
                                         <label for="message">Your Message *</label>
                                         <textarea id="message" name="message" cols="30" rows="5"
                                                   class="form-control"></textarea>
-                                        {% if form.errors.message %}
-                                        <div class="text-danger">{{ form.errors.message }}</div>
-                                        {% endif %}
                                     </div>
 
                                     {% if not request.user.is_authenticated %}
                                     <div class="form-group">
                                         <label for="name">Your Name *</label>
                                         <input type="text" name="name" class="form-control" id="name">
-                                        {% if form.errors.name %}
-                                        <div class="text-danger">{{ form.errors.name }}</div>
-                                        {% endif %}
                                     </div>
                                     <div class="form-group">
                                         <label for="email">Your Email *</label>
                                         <input type="email" name="email" class="form-control" id="email">
-                                        {% if form.errors.email %}
-                                        <div class="text-danger">{{ form.errors.email }}</div>
-                                        {% endif %}
                                     </div>
                                     {% endif %}
                                     <div class="form-group mb-0">

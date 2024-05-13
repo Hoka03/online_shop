@@ -7,9 +7,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         carts = [
             UserCart(
-                user_id=f'{i}',
-                product_id=f'{i}',
-                counts=f'{i}',
+                user_id=f'user_{i}',
+                product_id=f'product_{i}',
+                counts=f'count-{i}',
             )
             for i in range(1, 11)
         ]

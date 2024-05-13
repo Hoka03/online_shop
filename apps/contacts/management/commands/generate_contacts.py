@@ -8,6 +8,6 @@ class Command(BaseCommand):
                             email=f'email{i}@gmail.com',
                             message=f'message{i}',
                             title=f'title{i}')
-                    for i in range(1, 101)]
+                    for i in range(1, 100)]
         Contact.objects.bulk_create(contacts)
         self.stdout.write(self.style.SUCCESS('100 contacts created'))

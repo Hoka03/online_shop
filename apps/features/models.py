@@ -12,6 +12,7 @@ class Feature(models.Model):
     main_category = models.ForeignKey(MainCategory, on_delete=models.PROTECT, blank=True, null=True)
     sub_category = models.ForeignKey(SubCategory, on_delete=models.PROTECT, blank=True, null=True)
 
+    ordering_number = models.PositiveSmallIntegerField(unique=True)
     name_uz = models.CharField(max_length=70)
     slug = models.SlugField(max_length=70, unique=True)
     name_ru = models.CharField(max_length=70, blank=True)
