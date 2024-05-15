@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 
 
@@ -32,37 +33,53 @@
                 </tr>
                 </thead>
                 <tbody class="align-middle">
-
+                {% for cart in carts %}
                 <tr>
-                    <td class="align-middle"><img src="img/product-1.jpg" alt="" style="width: 50px;"> Product Name</td>
-                    <td class="align-middle">$150</td>
                     <td class="align-middle">
-                        <div class="input-group quantity mx-auto" style="width: 100px;">
-                            <div class="input-group-btn">
-                                <button class="btn btn-sm btn-primary btn-minus">
-                                    <i class="fa fa-minus"></i>
-                                </button>
-                            </div>
-                            <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center"
-                                   value="1">
-                            <div class="input-group-btn">
-                                <button class="btn btn-sm btn-primary btn-plus">
-                                    <i class="fa fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
+                        {% if cart.product_feature.product.get_first_image %}
+                        <img src="{{ cart.product_feature.product.get_first_image.image.url }}" alt=""
+                             style="width: 50px;">
+                        {% else %}
+                        <img src="{% static 'img/product-1.jpg' %}" alt="" style="width: 50px;">
+                        {{ cart.product_feature.product.title }}
+                        {% endif %}
                     </td>
-                    <td class="align-middle">$150</td>
+                    <td class="align-middle">{{ cart.product_feature.price }}</td>
+
                     <td class="align-middle">
-                        <button class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button>
+                        <form action="{% url 'update_count' cart.pk %}" method="post">
+                            {% csrf_token %}
+                            <div class="input-group quantity mx-auto" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-minus">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input name="counts" type="number"
+                                       class="form-control form-control-sm bg-secondary border-0 text-center"
+                                       value="{{ cart.counts }}" minlength="1" maxlength="5" id="example_id">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-plus">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                    <td class="align-middle">{% widthratio cart.product_feature.price 1 cart.counts %}</td>
+                    <td class="align-middle">
+                        <a href="{% url 'delete_cart' cart.pk %}">
+                            <button class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button>
+                        </a>
                     </td>
                 </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
         <div class="col-lg-4">
             <form class="mb-30" method="POST">
-                {% for msg in messages %}
+                {% for msg in messages %}3
                 <h3>{{ msg }}</h3>
                 {% endfor %}
                 {% csrf_token %}
@@ -79,33 +96,43 @@
                 <div class="border-bottom pb-2">
                     <div class="d-flex justify-content-between mb-3">
                         <h6>Subtotal</h6>
-                        <h6>$150</h6>
+                        <h6>{{ total }}</h6>
                     </div>
                     <div class="d-flex justify-content-between">
                         <h6 class="font-weight-medium">Shipping</h6>
-                        <h6 class="font-weight-medium">$10</h6>
+                        {% if shipping %}
+                            <h6 class="font-weight-medium">{{ shipping }}</h6>
+                        {% else %}
+                            <h6 class="font-weight-medium">0</h6>
+                        {% endif %}
                     </div>
 
                     {% if coupon %}
-                        <div class="d-flex justify-content-between">
-                            <h6 class="font-weight-medium">Coupon</h6>
-                            <h6 class="font-weight-medium">
-                                {% if coupon.1 %}
-                                    %
-                                {% else %}
-                                    UZS
-                                {% endif %}
-                                {{ coupon.0 }}
-                            </h6>
-                        </div>
+                    <div class="d-flex justify-content-between">
+                        <h6 class="font-weight-medium">Coupon</h6>
+                        <h6 class="font-weight-medium">
+                            {% if coupon.1 %}
+                            %
+                            {% else %}
+                            UZS
+                            {% endif %}
+                            {{ coupon.0 }}
+                        </h6>
+                    </div>
                     {% endif %}
                 </div>
+
                 <div class="pt-2">
                     <div class="d-flex justify-content-between mt-2">
                         <h5>Total</h5>
-                        <h5>$160</h5>
+                        {% if shipping %}
+                            <h5>{{ shipping|add:total }} UZS</h5>
+                        {% endif %}
                     </div>
-                    <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button>
+                    <a href="{% url 'checkout_page' %}">
+                        <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>

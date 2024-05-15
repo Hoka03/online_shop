@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from apps.categories.models import MainCategory, SubCategory
 from apps.comments.serveces import normalize_text
 from apps.general.services import get_field_by_language
+from apps.features.models import FeatureValue
 
 
 class Product(models.Model):
@@ -21,9 +22,36 @@ class Product(models.Model):
     long_desc_uz = models.TextField(max_length=1500)
     long_desc_ru = models.TextField(max_length=1500, blank=True)
     review_counts = models.PositiveSmallIntegerField(default=0)
-    rating = models.DecimalField(default=0, max_digits=2, decimal_places=1)
+    rating = models.DecimalField(default=0, max_digits=2, decimal_places=1, help_text='ALL rating AVG')
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_features(self):
+        # features = [
+        #     {
+        #         'feature_id': {
+        #             'name': 'name',#####
+        #             'values': [
+        #                 {'id': '1', 'name': '128}
+        #                 {'id': '2', 'name': '2341'}
+        #             ]
+        #         }
+        #     },
+        # ]
+        features = {}
+        feature_values = FeatureValue.objects.filter(productfeature__product_id=self.pk
+                                                     ).distinct().select_related('feature')
+        for feature_value in feature_values:
+            feature = feature_value.feature
+            feature_id = feature.pk
+            feature_name = feature.name
+            value = {'id': feature_value.pk, 'name': feature_value.value}
+
+            if feature_id not in features:
+                features[feature_id] = {'name': feature_name, 'values': [value]}
+            else:
+                features[feature_id]['values'].append(value)
+        return features
 
     def get_first_image(self):
         return self.productimage_set.first()

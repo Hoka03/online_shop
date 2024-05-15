@@ -3,7 +3,6 @@ from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 
 from apps.general.services import get_field_by_language
-from apps.products.models import Product
 from apps.categories.models import MainCategory, SubCategory
 from apps.comments.serveces import normalize_text
 
@@ -46,7 +45,7 @@ class Feature(models.Model):
 
 
 class FeatureValue(models.Model):
-    feature = models.ForeignKey(Feature, on_delete=models.CASCADE)
+    feature = models.ForeignKey(Feature, on_delete=models.CASCADE, related_name='feature_value')
     value_uz = models.CharField(max_length=70)
     slug = models.SlugField(max_length=70, unique=True)
     value_ru = models.CharField(max_length=70, blank=True)
@@ -73,8 +72,8 @@ class FeatureValue(models.Model):
 
 
 class ProductFeature(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='features')
-    feature_values = models.ManyToManyField(FeatureValue)
+    product = models.ForeignKey('products.Product', on_delete=models.CASCADE, related_name='features')
+    feature_values = models.ManyToManyField(FeatureValue, related_name='product_feature')
     price = models.DecimalField(max_digits=20, decimal_places=2, validators=[MinValueValidator(0)],
                                 help_text='So\'mda kiriting')
     quantity = models.PositiveSmallIntegerField(default=1, validators=[MinValueValidator(1)])

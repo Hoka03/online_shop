@@ -6,7 +6,8 @@ from apps.orders.models import Order, OrderProduct
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('user', 'payment_method', 'coupon_code', 'coupon_price',
-                    'first_name', 'last_name', 'email', 'phone_number',)
+                    'first_name', 'last_name', 'email', 'phone_number')
+    list_display_links = list_display
 
     def has_add_permission(self, request):
         return False

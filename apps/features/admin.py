@@ -5,7 +5,7 @@ from apps.features.models import Feature, FeatureValue, ProductFeature
 
 class FeatureValueInline(admin.StackedInline):
     model = FeatureValue
-    prepopulated_field = {'slug': ['name_uz']}
+    prepopulated_fields = {'slug': ['value_uz']}
     min_num = 2
 
 

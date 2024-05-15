@@ -1,7 +1,10 @@
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.db.models import Avg
 
 from apps.comments.forms import CommentCreateForm
+from apps.products.models import Product
+from apps.comments.models import Comment
 
 
 def comment_page(request, product_id):
@@ -19,9 +22,10 @@ def comment_page(request, product_id):
 
         comment.save()
         messages.success(request, 'Comment SUCCESS Added!!!')
+        avg_rating = Comment.objects.all().aggregate(avg=Avg('rating'))['avg']
+        Product.objects.filter(pk=product_id).update(rating=avg_rating)
     else:
         messages.error(request, form.errors)
 
-    return redirect(request.META['HTTP_REFERER'])
-
+    return redirect('product_detail_page', product_id)
 

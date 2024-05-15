@@ -15,6 +15,7 @@ class General(models.Model):
     email = models.EmailField()
     address = models.CharField(max_length=100)
     desc = models.CharField(max_length=500, blank=True)
+    shipping = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
     def __str__(self):
         return f'{self.name}'

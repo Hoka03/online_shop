@@ -39,7 +39,7 @@ def send_code_to_email(request):
 
     code = random.randint(1000, 10000)
     send_email_to_user(email, code)
-    UserAuthCode.objects.create(email=email, code=code, expire_at=now()+timedelta(minutes=5))
+    UserAuthCode.objects.create(email=email, code=code, expire_at=now() + timedelta(minutes=5))
 
     context = {
         'email': email,
@@ -82,28 +82,33 @@ def register_user(request):
 
 
 def login_page(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+    if request.method != 'POST':
+        return render(request, 'register_login/login.html')
 
-        if not email:
-            messages.error(request, 'Email was not entered')
-            return redirect('login-page')
+    email = request.POST.get('email')
+    password = request.POST.get('password')
 
-        if not password:
-            messages.error(request, 'password was not entered')
-            return redirect('login-page')
+    if not email:
+        messages.error(request, 'Email was not entered')
+        return redirect('login-page')
 
-        user = authenticate(request=request, email=email, password=password)
+    if not password:
+        messages.error(request, 'password was not entered')
+        return redirect('login-page')
 
-        if not user:
-            messages.error(request, 'Login or name was entered mistake')
-            return redirect('login-page')
+    user = authenticate(request=request, email=email, password=password)
 
-        login(request, user)
-        return redirect('home-page')
+    if not user:
+        messages.error(request, 'Login or name was entered mistake')
+        return redirect('login-page')
 
-    return render(request, 'register_login/login.html')
+    login(request, user)
+
+    redirect_url = request.POST.get('next')
+    if redirect_url:
+        return redirect(redirect_url)
+
+    return redirect('home-page')
 
 
 def log_out(request):

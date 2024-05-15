@@ -58,19 +58,25 @@
 
                 <form method="POST" action="{% url 'add_cart' product.pk %}">
                     {% csrf_token %}
-                    {% for feature in features %}
+                    {% for feature_id, feature_value in features.items %}
                     <div class="d-flex mb-3">
-                        <strong class="text-dark mr-3">{{ feature.slug }}</strong>
-                        {% for value_obj in feature.featurevalue_set.all %}
+                        <strong class="text-dark mr-3">{{ feature_value.name }}</strong>
+                        {% for value_obj in feature_value.values %}
                         <div class="custom-control custom-radio custom-control-inline">
                             <input type="radio" {% if forloop.counter == 1 %}checked {% endif %}
-                                   class="custom-control-input" id="{{ value_obj.pk }}" value="{{ value_obj.pk }}"
-                                   name="feature_{{ feature.pk }}">
-                            <label class="custom-control-label" for="{{ value_obj.pk }}">{{ value_obj.value }}</label>
+                                   class="custom-control-input" id="{{ value_obj.id }}" value="{{ value_obj.id }}"
+                                   name="feature_{{ feature_id }}">
+                            <label class="custom-control-label" for="{{ value_obj.id }}">{{ value_obj.name }}</label>
                         </div>
                         {% endfor %}
                     </div>
                     {% endfor %}
+                    <div>
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+
                     <form action="" method="POST">
                         {% csrf_token %}
                         <div class="d-flex align-items-center mb-4 pt-2">
